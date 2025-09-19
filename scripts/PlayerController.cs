@@ -334,9 +334,9 @@ public partial class PlayerController : Node
     {
         if (isOnWall && canWallDrag)
         {
-            if (targetVelocity.Y < 0) targetVelocity.Y = Mathf.Lerp(targetVelocity.Y, 0, 0.1f);
             var localHorizontalInput = Mathf.RoundToInt(horizontalInput);
             if (localHorizontalInput != CheckWallDirection()) localGravity = Mathf.Lerp(0, 40f, 0.05f);
+            if (targetVelocity.Y != 0) targetVelocity.Y = Mathf.Lerp(targetVelocity.Y, 0, 0.1f);
         }
         else if (localGravity != 40 && gravityTimer.IsStopped()) ResetGravity();
         targetVelocity.Y += localGravity;

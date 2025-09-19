@@ -8,7 +8,6 @@
 [sub_resource type="Resource" id="Resource_att0l"]
 script = ExtResource("2_sev3l")
 MaxHealth = 30.0
-Toughness = 100.0
 metadata/_custom_type_script = "uid://5eecorejv4my"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ics0k"]

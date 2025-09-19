@@ -1,0 +1,99 @@
+[gd_scene load_steps=10 format=3 uid="uid://4ngfu3lqpmw1"]
+
+[ext_resource type="Script" uid="uid://chpe8f0uu52wd" path="res://scripts/PogoRing.cs" id="1_ubjp7"]
+[ext_resource type="Script" uid="uid://5eecorejv4my" path="res://scripts/EnemyStats.cs" id="2_dg874"]
+[ext_resource type="Texture2D" uid="uid://4plueq1ivayj" path="res://assets/sprites/enemies/PogoRing.png" id="2_ubjp7"]
+[ext_resource type="Script" uid="uid://cs3byuibi0rk8" path="res://scripts/HealthComponent.cs" id="4_dg874"]
+
+[sub_resource type="Resource" id="Resource_dg874"]
+script = ExtResource("2_dg874")
+MaxHealth = 999999999.0
+Toughness = 999999999.0
+metadata/_custom_type_script = "uid://5eecorejv4my"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dg874"]
+radius = 16.0
+
+[sub_resource type="Animation" id="Animation_ubjp7"]
+resource_name = "Hit"
+length = 0.2
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.7, 0.7), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -6.283185307179586, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_dg874"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m6hyq"]
+_data = {
+&"Hit": SubResource("Animation_ubjp7"),
+&"RESET": SubResource("Animation_dg874")
+}
+
+[node name="PogoRing" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_ubjp7")
+enemyStats = SubResource("Resource_dg874")
+metadata/_custom_type_script = "uid://1fsrsfbylnvo"
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_ubjp7")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_dg874")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("4_dg874")
+metadata/_custom_type_script = "uid://cs3byuibi0rk8"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_m6hyq")
+}
