@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://cgo6hj8as88ut"
+path="res://.godot/imported/testingmap.png-9873d36d3c2a5da216f1a50459d9b10b.image"
+
+[deps]
+
+source_file="res://assets/sprites/worldSprite/testingmap.png"
+dest_files=["res://.godot/imported/testingmap.png-9873d36d3c2a5da216f1a50459d9b10b.image"]
+
+[params]
+

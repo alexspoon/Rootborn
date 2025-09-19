@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c16ug5bcjmkwg"]
+
+[ext_resource type="Script" uid="uid://c6uxjum0y60n1" path="res://scripts/PlayerCamera.cs" id="1_lp7lw"]
+
+[node name="PlayerCamera" type="Camera2D"]
+process_callback = 0
+script = ExtResource("1_lp7lw")
+LerpWeight = 0.05

@@ -1,0 +1,31 @@
+[gd_scene load_steps=7 format=3 uid="uid://c20t2pxc2smif"]
+
+[ext_resource type="Texture2D" uid="uid://n1nboptrh6w7" path="res://assets/sprites/enemies/TomatoMan.png" id="1_ics0k"]
+[ext_resource type="Script" uid="uid://db0kiy3kak75s" path="res://scripts/TomatoEnemy.cs" id="1_q2fth"]
+[ext_resource type="Script" uid="uid://5eecorejv4my" path="res://scripts/EnemyStats.cs" id="2_sev3l"]
+[ext_resource type="Script" uid="uid://cs3byuibi0rk8" path="res://scripts/HealthComponent.cs" id="4_sev3l"]
+
+[sub_resource type="Resource" id="Resource_att0l"]
+script = ExtResource("2_sev3l")
+MaxHealth = 30.0
+Toughness = 100.0
+metadata/_custom_type_script = "uid://5eecorejv4my"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ics0k"]
+size = Vector2(32, 30)
+
+[node name="TomatoEnemy" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_q2fth")
+enemyStats = SubResource("Resource_att0l")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_ics0k")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ics0k")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("4_sev3l")
+metadata/_custom_type_script = "uid://cs3byuibi0rk8"

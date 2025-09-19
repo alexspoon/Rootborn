@@ -1,0 +1,218 @@
+[gd_scene load_steps=12 format=3 uid="uid://b6526iafpbhs3"]
+
+[ext_resource type="Script" uid="uid://clv3lmiadyten" path="res://scripts/MainMenu.cs" id="1_ow34m"]
+[ext_resource type="FontFile" uid="uid://d21qsa4l68ocl" path="res://assets/fonts/alagard.ttf" id="2_7rblo"]
+[ext_resource type="Texture2D" uid="uid://brwmnyt7yalrj" path="res://assets/sprites/gui/MenuButton.png" id="2_ow34m"]
+[ext_resource type="Texture2D" uid="uid://cti53wiey6313" path="res://assets/sprites/gui/MenuButtonHover.png" id="3_l72w3"]
+[ext_resource type="Texture2D" uid="uid://bxgyrxtoepaqx" path="res://assets/sprites/gui/MenuButtonPressed.png" id="4_a6001"]
+[ext_resource type="Texture2D" uid="uid://q8doe6yvbok5" path="res://assets/sprites/parallax/background1.png" id="5_ue4lf"]
+[ext_resource type="Texture2D" uid="uid://bminul2ug6llf" path="res://assets/sprites/parallax/background2.png" id="6_7rblo"]
+[ext_resource type="Texture2D" uid="uid://c5wvcv5h7rg4o" path="res://assets/sprites/parallax/background3.png" id="7_ov3pg"]
+[ext_resource type="Texture2D" uid="uid://ck4ysuoj3tjk6" path="res://assets/sprites/parallax/background4a.png" id="8_81rgk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_rvslj"]
+line_spacing = 1.0
+font = ExtResource("2_7rblo")
+font_size = 96
+font_color = Color(0.0505673, 0.107299, 0, 1)
+outline_size = 2
+outline_color = Color(0.217515, 0.517162, 5.77569e-07, 1)
+shadow_size = 4
+shadow_color = Color(0.268833, 0.72993, 0, 0.498039)
+
+[sub_resource type="LabelSettings" id="LabelSettings_agb1x"]
+font = ExtResource("2_7rblo")
+font_size = 48
+font_color = Color(0.0505673, 0.107299, 0, 1)
+outline_size = 2
+outline_color = Color(0.217515, 0.517162, 5.77569e-07, 1)
+shadow_color = Color(0.268833, 0.72993, 0, 0.498039)
+
+[node name="MainMenu" type="Node"]
+script = ExtResource("1_ow34m")
+LevelName = "MainMenu"
+
+[node name="Title" type="Label" parent="."]
+top_level = true
+texture_filter = 1
+anchors_preset = -1
+anchor_left = 0.0551806
+anchor_top = 0.0984074
+anchor_right = 0.460181
+anchor_bottom = 0.265407
+offset_left = 0.431992
+offset_top = 0.231987
+offset_right = -0.127991
+offset_bottom = 0.0159912
+text = "rootBorn"
+label_settings = SubResource("LabelSettings_rvslj")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayButton" type="TextureButton" parent="."]
+top_level = true
+anchors_preset = -1
+anchor_left = 0.138889
+anchor_top = 0.296296
+anchor_right = 0.361
+anchor_bottom = 0.494
+offset_right = 0.128082
+offset_bottom = -0.112183
+pivot_offset = Vector2(128, 64)
+focus_neighbor_top = NodePath("../QuitButton")
+focus_neighbor_bottom = NodePath("../ConfigButton")
+texture_normal = ExtResource("2_ow34m")
+texture_pressed = ExtResource("4_a6001")
+texture_hover = ExtResource("3_l72w3")
+texture_focused = ExtResource("3_l72w3")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="PlayButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "play"
+label_settings = SubResource("LabelSettings_agb1x")
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 129
+uppercase = true
+metadata/_edit_use_anchors_ = true
+
+[node name="ConfigButton" type="TextureButton" parent="."]
+top_level = true
+anchors_preset = -1
+anchor_left = 0.138889
+anchor_top = 0.506173
+anchor_right = 0.361
+anchor_bottom = 0.704
+offset_right = 0.128082
+offset_bottom = -0.191925
+pivot_offset = Vector2(128, 64)
+focus_neighbor_top = NodePath("../PlayButton")
+focus_neighbor_bottom = NodePath("../QuitButton")
+texture_normal = ExtResource("2_ow34m")
+texture_pressed = ExtResource("4_a6001")
+texture_hover = ExtResource("3_l72w3")
+texture_focused = ExtResource("3_l72w3")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="ConfigButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "config"
+label_settings = SubResource("LabelSettings_agb1x")
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 129
+uppercase = true
+metadata/_edit_use_anchors_ = true
+
+[node name="QuitButton" type="TextureButton" parent="."]
+top_level = true
+anchors_preset = -1
+anchor_left = 0.138889
+anchor_top = 0.716049
+anchor_right = 0.361
+anchor_bottom = 0.914
+offset_right = 0.128082
+offset_bottom = -0.272278
+pivot_offset = Vector2(128, 64)
+focus_neighbor_top = NodePath("../ConfigButton")
+focus_neighbor_bottom = NodePath("../PlayButton")
+texture_normal = ExtResource("2_ow34m")
+texture_pressed = ExtResource("4_a6001")
+texture_hover = ExtResource("3_l72w3")
+texture_focused = ExtResource("3_l72w3")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="QuitButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "quit"
+label_settings = SubResource("LabelSettings_agb1x")
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 129
+uppercase = true
+metadata/_edit_use_anchors_ = true
+
+[node name="LevelSelection" type="LineEdit" parent="."]
+top_level = true
+anchors_preset = -1
+anchor_left = 0.403056
+anchor_top = 0.332963
+anchor_right = 0.590478
+anchor_bottom = 0.480983
+offset_left = -0.320038
+offset_top = 0.23999
+offset_right = -0.230835
+offset_bottom = 0.322876
+theme_override_colors/font_color = Color(0.0335523, 0.0807472, 0, 1)
+theme_override_colors/font_selected_color = Color(0.139124, 0.243446, 1.20327e-07, 1)
+theme_override_colors/font_outline_color = Color(0.648728, 1, 0.184302, 1)
+theme_override_colors/caret_color = Color(0, 0.560784, 0, 1)
+theme_override_colors/selection_color = Color(0.137255, 0.243137, 0, 0.776471)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_7rblo")
+theme_override_font_sizes/font_size = 48
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="ParallaxBackground" type="Node2D" parent="."]
+top_level = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Layer0" type="Parallax2D" parent="ParallaxBackground"]
+z_index = -5
+repeat_size = Vector2(1152, 0)
+autoscroll = Vector2(1, 0)
+repeat_times = 2
+
+[node name="Sprite" type="Sprite2D" parent="ParallaxBackground/Layer0"]
+position = Vector2(576, 324)
+scale = Vector2(1.2, 1.35)
+texture = ExtResource("5_ue4lf")
+
+[node name="Layer1" type="Parallax2D" parent="ParallaxBackground"]
+z_index = -5
+repeat_size = Vector2(1152, 0)
+autoscroll = Vector2(2, 0)
+repeat_times = 2
+
+[node name="Sprite" type="Sprite2D" parent="ParallaxBackground/Layer1"]
+position = Vector2(576, 324)
+scale = Vector2(1.2, 1.35)
+texture = ExtResource("6_7rblo")
+
+[node name="Layer2" type="Parallax2D" parent="ParallaxBackground"]
+z_index = -5
+repeat_size = Vector2(1152, 0)
+autoscroll = Vector2(4, 0)
+repeat_times = 2
+
+[node name="Sprite" type="Sprite2D" parent="ParallaxBackground/Layer2"]
+position = Vector2(576, 324)
+scale = Vector2(1.2, 1.35)
+texture = ExtResource("7_ov3pg")
+
+[node name="Layer3" type="Parallax2D" parent="ParallaxBackground"]
+z_index = -5
+repeat_size = Vector2(1152, 0)
+autoscroll = Vector2(8, 0)
+repeat_times = 2
+
+[node name="Sprite" type="Sprite2D" parent="ParallaxBackground/Layer3"]
+position = Vector2(576, 324)
+scale = Vector2(1.2, 1.35)
+texture = ExtResource("8_81rgk")

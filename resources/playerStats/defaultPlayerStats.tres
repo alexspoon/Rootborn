@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PlayerStats" load_steps=2 format=3 uid="uid://bhjlsvrgvvmhs"]
+
+[ext_resource type="Script" uid="uid://bwwlni0una38n" path="res://scripts/PlayerStats.cs" id="1_ryoir"]
+
+[resource]
+script = ExtResource("1_ryoir")
+MaxHealth = 100.0
+metadata/_custom_type_script = "uid://pawmnag85fj2"
