@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c20t2pxc2smif"]
+[gd_scene load_steps=14 format=3 uid="uid://c20t2pxc2smif"]
 
 [ext_resource type="Texture2D" uid="uid://n1nboptrh6w7" path="res://assets/sprites/enemies/TomatoMan.png" id="1_ics0k"]
 [ext_resource type="Script" uid="uid://db0kiy3kak75s" path="res://scripts/TomatoEnemy.cs" id="1_q2fth"]
@@ -8,14 +8,61 @@
 [sub_resource type="Resource" id="Resource_att0l"]
 script = ExtResource("2_sev3l")
 MaxHealth = 30.0
+AttackDamage = 10.0
+HasRangedAttack = true
+TerminalVelocity = 500.0
+LocalGravity = 20.0
+MaxSpeed = 140.0
+GroundAcceleration = 20.0
+AirAcceleration = 50.0
+GroundDeceleration = 5.0
+AirDeceleration = 2.0
 metadata/_custom_type_script = "uid://5eecorejv4my"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ics0k"]
 size = Vector2(32, 30)
 
+[sub_resource type="Gradient" id="Gradient_sev3l"]
+offsets = PackedFloat32Array(0, 0.8161765)
+colors = PackedColorArray(0.52156866, 0, 0, 1, 0, 0.2509804, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_att0l"]
+gradient = SubResource("Gradient_sev3l")
+
+[sub_resource type="Curve" id="Curve_81ind"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.75113124, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -11.716441, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_myi22"]
+curve = SubResource("Curve_81ind")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sev3l"]
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(16, 24, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 0.0
+emission_ring_inner_radius = 16.0
+emission_ring_cone_angle = 90.0
+angle_min = -502.5
+angle_max = -353.9
+direction = Vector3(0, -1, 0)
+spread = 20.0
+flatness = 1.0
+initial_velocity_min = 25.0
+initial_velocity_max = 50.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_myi22")
+color_ramp = SubResource("GradientTexture1D_att0l")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sev3l"]
+radius = 256.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sev3l"]
+size = Vector2(40, 30)
+
 [node name="TomatoEnemy" type="CharacterBody2D"]
-collision_layer = 2
-collision_mask = 2
+collision_mask = 3
 script = ExtResource("1_q2fth")
 enemyStats = SubResource("Resource_att0l")
 
@@ -28,3 +75,29 @@ shape = SubResource("RectangleShape2D_ics0k")
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("4_sev3l")
 metadata/_custom_type_script = "uid://cs3byuibi0rk8"
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+z_index = -1
+amount = 64
+process_material = SubResource("ParticleProcessMaterial_sev3l")
+
+[node name="AggroRadius" type="Area2D" parent="."]
+
+[node name="Collision" type="CollisionShape2D" parent="AggroRadius"]
+shape = SubResource("CircleShape2D_sev3l")
+debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="HurtBox" type="Area2D" parent="."]
+
+[node name="Collision" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("RectangleShape2D_sev3l")
+
+[node name="AggroCooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="JumpCooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="PositionCheck" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true

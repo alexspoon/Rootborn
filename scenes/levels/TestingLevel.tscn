@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://bigm6323ehmrf"]
+[gd_scene load_steps=16 format=3 uid="uid://bigm6323ehmrf"]
 
 [ext_resource type="Script" uid="uid://q6rdkxgsgpnx" path="res://scripts/Level.cs" id="1_pd306"]
 [ext_resource type="PackedScene" uid="uid://c16ug5bcjmkwg" path="res://scenes/PlayerCamera.tscn" id="2_r37e5"]
 [ext_resource type="PackedScene" uid="uid://bolbcgmhk67xv" path="res://scenes/Player.tscn" id="3_rcj5i"]
 [ext_resource type="Script" uid="uid://bwwlni0una38n" path="res://scripts/PlayerStats.cs" id="4_rcj5i"]
 [ext_resource type="PackedScene" uid="uid://4ngfu3lqpmw1" path="res://scenes/enemies/PogoRing.tscn" id="5_gbxu6"]
+[ext_resource type="PackedScene" uid="uid://c20t2pxc2smif" path="res://scenes/enemies/TomatoEnemy.tscn" id="6_ed8hi"]
 
 [sub_resource type="Resource" id="Resource_gbxu6"]
 script = ExtResource("4_rcj5i")
@@ -306,3 +307,18 @@ position = Vector2(1472, 112)
 
 [node name="PogoRing8" parent="." instance=ExtResource("5_gbxu6")]
 position = Vector2(280, 408)
+
+[node name="TomatoEnemy" parent="." instance=ExtResource("6_ed8hi")]
+position = Vector2(568, 560)
+
+[node name="TomatoEnemy2" parent="." instance=ExtResource("6_ed8hi")]
+position = Vector2(600, 304)
+
+[node name="TomatoEnemy3" parent="." instance=ExtResource("6_ed8hi")]
+position = Vector2(160, 304)
+
+[node name="TomatoEnemy4" parent="." instance=ExtResource("6_ed8hi")]
+position = Vector2(992, 64)
+
+[node name="TomatoEnemy5" parent="." instance=ExtResource("6_ed8hi")]
+position = Vector2(1272, 64)

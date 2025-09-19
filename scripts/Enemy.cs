@@ -4,16 +4,10 @@ using Godot;
 public partial class Enemy : CharacterBody2D
 {
     [Export] public EnemyStats enemyStats;
+    public bool ChasingPlayer;
     public HealthComponent healthComponent;
+    public Vector2 targetVelocity;
     public Player player;
-    public bool Regenerative;
-    public float RegenAmount;
-    public float RegenCooldown;
-    public float Speed;
-    public float AttackDamage;
-    public float AttackCooldown;
-    public float RangedAttackDamage;
-    public float RangedAttackCooldown;
 
     public override void _Ready()
     {
@@ -29,20 +23,58 @@ public partial class Enemy : CharacterBody2D
 
     public virtual void Init()
     {
-        Regenerative = enemyStats.Regenerative;
-        RegenAmount = enemyStats.RegenAmount;
-        RegenCooldown = enemyStats.RegenCooldown;
         healthComponent.MaxHealth = enemyStats.MaxHealth;
         healthComponent.Toughness = enemyStats.Toughness;
-        Speed = enemyStats.Speed;
-        AttackDamage = enemyStats.AttackDamage;
-        AttackCooldown = enemyStats.AttackCooldown;
-        RangedAttackDamage = enemyStats.RangedAttackDamage;
-        RangedAttackCooldown = enemyStats.RangedAttackCooldown;
         healthComponent.FullHeal();
+        healthComponent.OnDamage += ApplyKnockback;
     }
+
+    public void ApplyKnockback()
+    {
+
+    }
+
     public virtual void ChasePlayer()
     {
-        
+        if (player == null) return;
+        Vector2 movementDirection = (player.GlobalPosition - GlobalPosition).Normalized();
+        var velocityChange = 0f;
+        if (IsOnFloor())
+        {
+            switch (ChasingPlayer)
+            {
+                case true:
+                    velocityChange = enemyStats.GroundAcceleration;
+                    break;
+                case false:
+                    velocityChange = enemyStats.GroundDeceleration;
+                    break;
+            }
+        }
+        else
+        {
+            ApplyGravity();
+            switch (ChasingPlayer)
+            {
+                case true:
+                    velocityChange = enemyStats.AirAcceleration;
+                    break;
+                case false:
+                    velocityChange = enemyStats.AirDeceleration;
+                    break;
+            }
+        }
+        if (!ChasingPlayer) movementDirection = Vector2.Zero;
+        if (IsOnFloor()) targetVelocity.Y = 0;
+        targetVelocity.X = Mathf.MoveToward(targetVelocity.X, movementDirection.X * enemyStats.MaxSpeed, velocityChange);
+        Velocity = targetVelocity;
+        MoveAndSlide();
     }
+    public virtual void ApplyGravity()
+    {
+        targetVelocity.Y += enemyStats.LocalGravity;
+        targetVelocity = new Vector2(targetVelocity.X, Mathf.Min(targetVelocity.Y, enemyStats.TerminalVelocity));
+    }
+
+    
 }

@@ -11,6 +11,7 @@ public partial class Player : CharacterBody2D
     public Area2D PickupArea;
     public PlayerCamera playerCamera;
     private GpuParticles2D _trail;
+    private ProgressBar healthBar;
 
     public override void _Ready()
     {
@@ -20,7 +21,7 @@ public partial class Player : CharacterBody2D
         healthComponent = GetNode<HealthComponent>("HealthComponent");
         Sprite = GetNode<Sprite2D>("Sprite");
         PickupArea = GetNode<Area2D>("PickupArea");
-
+        healthBar = GetNode<ProgressBar>("HealthBar");
         _trail = GetNode<GpuParticles2D>("Trail");
 
         UpdateStats();
@@ -31,6 +32,8 @@ public partial class Player : CharacterBody2D
         //if (Input.IsActionJustPressed("inputEquipTool")) _saveManager.SaveMetaprogression("test.json");
 
         _trail.GlobalPosition = GlobalPosition;
+        healthBar.Value = healthComponent.Health;
+        healthBar.MaxValue = healthComponent.MaxHealth;
 
         Pickup();
         DebugTools();
