@@ -5,271 +5,16 @@
 [ext_resource type="Script" uid="uid://cs3byuibi0rk8" path="res://scripts/HealthComponent.cs" id="2_v6fml"]
 [ext_resource type="Texture2D" uid="uid://b6skokrq7vdrr" path="res://assets/sprites/player/littleguy.png" id="3_qu4a1"]
 [ext_resource type="Script" uid="uid://dl1c7a6uq6m4y" path="res://scripts/PlayerController.cs" id="4_mdl7e"]
+[ext_resource type="Animation" uid="uid://dylaogbgqlpal" path="res://assets/animations/AttackDown.res" id="6_6eyey"]
 [ext_resource type="Texture2D" uid="uid://byrcjxibcdr8a" path="res://assets/sprites/player/WeaponTemp.png" id="6_70d11"]
+[ext_resource type="Animation" uid="uid://dns0i4chyg1hj" path="res://assets/animations/AttackLeft.res" id="7_d3wef"]
+[ext_resource type="Animation" uid="uid://baph28wnwolfv" path="res://assets/animations/AttackRight.res" id="8_o4126"]
+[ext_resource type="Animation" uid="uid://b7nmsn18h5eru" path="res://assets/animations/AttackUp.res" id="9_lkdrv"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_70d11"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5q5h1"]
 height = 32.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_p0vlq"]
-radius = 50.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_qu4a1"]
-size = Vector2(24, 20)
-
-[sub_resource type="Curve" id="Curve_qu4a1"]
-_data = [Vector2(0, 0), 0.0, 13.561872, 0, 0, Vector2(0.25225222, 1), -0.08226794, -0.08226794, 0, 0, Vector2(0.5045045, 1), -0.25594458, -0.25594458, 0, 0, Vector2(0.7567567, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -9.178007, 0.0, 0, 0]
-point_count = 5
-
-[sub_resource type="CurveTexture" id="CurveTexture_70d11"]
-curve = SubResource("Curve_qu4a1")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qu4a1"]
-particle_flag_align_y = true
-particle_flag_disable_z = true
-inherit_velocity_ratio = -0.01
-direction = Vector3(0, 0, 0)
-spread = 0.0
-gravity = Vector3(0, 0, 0)
-scale_min = 2.0
-scale_max = 2.0
-scale_curve = SubResource("CurveTexture_70d11")
-
-[sub_resource type="Animation" id="Animation_6eyey"]
-resource_name = "AttackDown"
-length = 0.3
-step = 0.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Weapon:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, 25), Vector2(0, 20), Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Weapon:rotation")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [0.0, -0.08726646259971647, 0.08726646259971647, 0.0]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("PlayerController")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 4.835293e-05, 0.1, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"values": [{
-"args": [],
-"method": &"StartAttack"
-}, {
-"args": [],
-"method": &"StopHitCheck"
-}, {
-"args": [],
-"method": &"HitCheck"
-}, {
-"args": [],
-"method": &"FinishAttack"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_khinc"]
-resource_name = "AttackLeft"
-length = 0.3
-step = 0.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Weapon:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0, -5), Vector2(-21, 0), Vector2(-6, -4), Vector2(0, -5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Weapon:rotation")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [0.17453292519943295, -1.5707963267948966, -0.7853981633974483, 0.17453292519943295]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("PlayerController")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"values": [{
-"args": [],
-"method": &"StartAttack"
-}, {
-"args": [],
-"method": &"StopHitCheck"
-}, {
-"args": [],
-"method": &"FinishAttack"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_70d11"]
-resource_name = "AttackRight"
-length = 0.3
-step = 0.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Weapon:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0, -5), Vector2(21, 0), Vector2(5.999999, -3.9999995), Vector2(0, -5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Weapon:rotation")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [-0.17453292519943295, 1.5707941, 0.78539705, -0.17453292519943295]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("PlayerController")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"values": [{
-"args": [],
-"method": &"StartAttack"
-}, {
-"args": [],
-"method": &"StopHitCheck"
-}, {
-"args": [],
-"method": &"FinishAttack"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_bruh7"]
-resource_name = "AttackUp"
-length = 0.3
-step = 0.0333333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Weapon:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0, -2), Vector2(0, -25), Vector2(0, -20), Vector2(0, -5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Weapon:rotation")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [0.0, 0.08726646259971647, -0.08726646259971647, 0.0]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("PlayerController")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"values": [{
-"args": [],
-"method": &"StartAttack"
-}, {
-"args": [],
-"method": &"StopHitCheck"
-}, {
-"args": [],
-"method": &"FinishAttack"
-}]
-}
-
-[sub_resource type="Animation" id="Animation_cw2d6"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Weapon:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, -5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Weapon:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [-0.261799]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_khinc"]
-_data = {
-&"AttackDown": SubResource("Animation_6eyey"),
-&"AttackLeft": SubResource("Animation_khinc"),
-&"AttackRight": SubResource("Animation_70d11"),
-&"AttackUp": SubResource("Animation_bruh7"),
-&"RESET": SubResource("Animation_cw2d6")
-}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_70d11"]
 content_margin_left = 2.0
@@ -300,6 +45,66 @@ corner_radius_bottom_left = 6
 corner_detail = 6
 anti_aliasing = false
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_p0vlq"]
+radius = 50.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qu4a1"]
+size = Vector2(33, 16)
+
+[sub_resource type="Curve" id="Curve_qu4a1"]
+_data = [Vector2(0, 0), 0.0, 13.561872, 0, 0, Vector2(0.25225222, 1), -0.08226794, -0.08226794, 0, 0, Vector2(0.5045045, 1), -0.25594458, -0.25594458, 0, 0, Vector2(0.7567567, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -9.178007, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="CurveTexture" id="CurveTexture_70d11"]
+curve = SubResource("Curve_qu4a1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qu4a1"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+inherit_velocity_ratio = -0.01
+direction = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_70d11")
+
+[sub_resource type="Animation" id="Animation_cw2d6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Weapon:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Weapon:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-0.261799]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_khinc"]
+_data = {
+&"AttackDown": ExtResource("6_6eyey"),
+&"AttackLeft": ExtResource("7_d3wef"),
+&"AttackRight": ExtResource("8_o4126"),
+&"AttackUp": ExtResource("9_lkdrv"),
+&"RESET": SubResource("Animation_cw2d6")
+}
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_p0vlq")
 playerStats = ExtResource("2_3li8b")
@@ -316,6 +121,19 @@ mesh = SubResource("CapsuleMesh_70d11")
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_5q5h1")
 
+[node name="HealthBar" type="ProgressBar" parent="."]
+visible = false
+offset_left = -6.0
+offset_top = -14.0
+offset_right = 6.0
+offset_bottom = 14.0
+theme_override_styles/background = SubResource("StyleBoxFlat_70d11")
+theme_override_styles/fill = SubResource("StyleBoxFlat_cw2d6")
+value = 50.0
+fill_mode = 3
+show_percentage = false
+metadata/_edit_use_anchors_ = true
+
 [node name="PickupArea" type="Area2D" parent="."]
 visible = false
 
@@ -328,7 +146,7 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="HurtBox" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(22, 0)
+position = Vector2(26.5, 1.2239188e-06)
 shape = SubResource("RectangleShape2D_qu4a1")
 
 [node name="HealthComponent" type="Node" parent="."]
@@ -342,7 +160,6 @@ script = ExtResource("4_mdl7e")
 
 [node name="Trail" type="GPUParticles2D" parent="."]
 physics_interpolation_mode = 2
-visible = false
 top_level = true
 z_index = -1
 amount = 512
@@ -360,15 +177,3 @@ z_index = -1
 position = Vector2(0, -5)
 rotation = -0.261799
 texture = ExtResource("6_70d11")
-
-[node name="HealthBar" type="ProgressBar" parent="."]
-offset_left = -6.0
-offset_top = -14.0
-offset_right = 6.0
-offset_bottom = 14.0
-theme_override_styles/background = SubResource("StyleBoxFlat_70d11")
-theme_override_styles/fill = SubResource("StyleBoxFlat_cw2d6")
-value = 50.0
-fill_mode = 3
-show_percentage = false
-metadata/_edit_use_anchors_ = true

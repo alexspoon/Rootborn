@@ -5,11 +5,15 @@ using Godot;
 public partial class PlayerController : Node
 {
     private Player player;
+    private MeshInstance2D mesh;
+    public float VelocityChange;
+    
     #region MovementStats
     [ExportSubgroup("Movement Properties")]
     [Export] public bool SnapInput = true;
     [Export] public float MaxSpeed = 220f;
     [Export] public float Acceleration = 50f;
+    [Export] public float AirAcceleration = 75f;
     [Export] public float GroundDeceleration = 20f;
     [Export] public float AirDeceleration = 5f;
     [Export] public float JumpStrength = -520f;
@@ -26,6 +30,7 @@ public partial class PlayerController : Node
     public override void _Ready()
     {
         player = GetParent<Player>();
+        mesh = player.GetNode<MeshInstance2D>("DebugMesh");
         attackArea = player.GetNode<Area2D>("AttackArea");
         animationPlayer = player.GetNode<AnimationPlayer>("AnimationPlayer");
         gravityTimer = new();
@@ -73,33 +78,57 @@ public partial class PlayerController : Node
     private AnimationPlayer animationPlayer;
     private void CheckAttackDirection()
     {
+        if (isOnWall)
+        {
+            if (Mathf.RoundToInt(HorizontalInput) == 1)
+            {
+                if (!canAttack) return;
+                attackArea.GlobalRotation = Mathf.DegToRad(180f);
+                attackArea.Position = Vector2.Zero;
+                attackArea.Position = new Vector2(-6, 0);
+                attackDirection = attackDirections.Left;
+            }
+            if (Mathf.RoundToInt(HorizontalInput) == -1)
+            {
+                if (!canAttack) return;
+                attackArea.GlobalRotation = 0;
+                attackArea.Position = Vector2.Zero;
+                attackArea.Position = new Vector2(6, 0);
+                attackDirection = attackDirections.Right;
+            }
+        }
+
         if (Input.IsActionPressed("inputUp"))
         {
             if (!canAttack) return;
-            attackArea.Rotation = Mathf.DegToRad(-90f);
+            attackArea.GlobalRotation = Mathf.DegToRad(-90f);
             attackArea.Position = new Vector2(0, -6);
             attackDirection = attackDirections.Up;
         }
-        if (Input.IsActionPressed("inputLeft"))
+        if (Input.IsActionPressed("inputLeft") && !isOnWall)
         {
-            if (!isOnWall) player.RotationDegrees = Mathf.Lerp(player.RotationDegrees, -5, 0.1f);
+            mesh.RotationDegrees = Mathf.Lerp(mesh.RotationDegrees, -5, 0.1f);
+            player.healthBar.RotationDegrees = Mathf.Lerp(player.healthBar.RotationDegrees, -5, 0.1f);
             if (!canAttack) return;
-            attackArea.Rotation = Mathf.DegToRad(180f);
+            attackArea.GlobalRotation = Mathf.DegToRad(180f);
             attackArea.Position = Vector2.Zero;
+            attackArea.Position = new Vector2(-6, 0);
             attackDirection = attackDirections.Left;
         }
-        if (Input.IsActionPressed("inputRight"))
+        if (Input.IsActionPressed("inputRight") && !isOnWall)
         {
-            if (!isOnWall) player.RotationDegrees = Mathf.Lerp(player.RotationDegrees, 5, 0.1f);
+            mesh.RotationDegrees = Mathf.Lerp(mesh.RotationDegrees, 5, 0.1f);
+            player.healthBar.RotationDegrees = Mathf.Lerp(player.healthBar.RotationDegrees, 5, 0.1f);
             if (!canAttack) return;
-            attackArea.Rotation = 0;
+            attackArea.GlobalRotation = 0;
             attackArea.Position = Vector2.Zero;
+            attackArea.Position = new Vector2(6, 0);
             attackDirection = attackDirections.Right;
         }
         if (Input.IsActionPressed("inputDown"))
         {
             if (!canAttack) return;
-            attackArea.Rotation = Mathf.DegToRad(90f);
+            attackArea.GlobalRotation = Mathf.DegToRad(90f);
             attackArea.Position = new Vector2(0, 6);
             attackDirection = attackDirections.Down;
         }
@@ -181,53 +210,54 @@ public partial class PlayerController : Node
     private bool isDashing = false;
     private bool isOnWall;
     private bool canWallDrag = true;
-    private float horizontalInput;
+    public float HorizontalInput;
     private void Movement(double delta)
     {
         isOnWall = player.IsOnWallOnly();
-        horizontalInput = Input.GetAxis("inputLeft", "inputRight");
+        HorizontalInput = Input.GetAxis("inputLeft", "inputRight");
         if (player.IsOnCeiling() && targetVelocity.Y < 0) targetVelocity.Y = Mathf.Lerp(targetVelocity.Y, 0, 0.1f);
         if (isOnWall && targetVelocity.X != 0) targetVelocity.X = Mathf.Lerp(targetVelocity.X, 0, 0.1f);
-        if (!canWallDrag) horizontalInput = 0;
-        if (horizontalInput == 0)
+        if (!canWallDrag) HorizontalInput = 0;
+        if (HorizontalInput == 0)
         {
-            player.Rotation = Mathf.Lerp(player.Rotation, 0, 0.1f);
+            mesh.Rotation = Mathf.Lerp(mesh.Rotation, 0, 0.1f);
+            player.healthBar.Rotation = Mathf.Lerp(player.healthBar.Rotation, 0, 0.1f);
         }
-        if (horizontalInput > 0)
+        if (HorizontalInput > 0)
         {
             player.Sprite.FlipH = false;
         }
-        else if (horizontalInput < 0)
+        else if (HorizontalInput < 0)
         {
             player.Sprite.FlipH = true;
         }
-        var velocityChange = 0f;
+        VelocityChange = 0;
         if (player.IsOnFloor())
         {
-            if (horizontalInput == 0)
+            if (HorizontalInput == 0)
             {
-                velocityChange = GroundDeceleration;
+                VelocityChange = GroundDeceleration;
                 MaxSpeed = 220;
             }
             else
             {
-                velocityChange = Acceleration;
+                VelocityChange = Acceleration;
                 MaxSpeed = 220;
             }
         }
         else
         {
-            if (horizontalInput == 0)
+            if (HorizontalInput == 0)
             {
-                velocityChange = AirDeceleration;
+                VelocityChange = AirDeceleration;
             }
             else
             {
-                velocityChange = Acceleration + 25;
+                VelocityChange = AirAcceleration;
                 MaxSpeed = 250;
             }
         }
-        targetVelocity.X = Mathf.MoveToward(targetVelocity.X, horizontalInput * MaxSpeed, velocityChange);
+        targetVelocity.X = Mathf.MoveToward(targetVelocity.X, HorizontalInput * MaxSpeed, VelocityChange);
         if (Input.IsActionJustPressed("inputDash")) DashStart();
         if (player.IsOnFloor())
         {
@@ -282,7 +312,7 @@ public partial class PlayerController : Node
         await ToSignal(timer, SceneTreeTimer.SignalName.Timeout);
         canJump = false;
     }
-    private void Jump()
+    public void Jump()
     {
         if (isDashing || isOnWall) ResetGravity();
         targetVelocity.Y += JumpStrength;
@@ -303,14 +333,15 @@ public partial class PlayerController : Node
         if (!canDash) return;
         isDashing = true;
         canDash = false;
-        var localHorizontalInput = Mathf.RoundToInt(horizontalInput);
+        var localHorizontalInput = Mathf.RoundToInt(HorizontalInput);
         if (localHorizontalInput == 0)
         {
             DashEnd();
             dashCooldownTimer.Start();
             return;
         }
-        player.RotationDegrees = localHorizontalInput * 45f;
+        mesh.RotationDegrees = localHorizontalInput * 45f;
+        player.healthBar.RotationDegrees = localHorizontalInput * 45f;
         targetVelocity.X = localHorizontalInput * 900;
         targetVelocity.Y = 0;
         localGravity = 0;
@@ -334,7 +365,7 @@ public partial class PlayerController : Node
     {
         if (isOnWall && canWallDrag)
         {
-            var localHorizontalInput = Mathf.RoundToInt(horizontalInput);
+            var localHorizontalInput = Mathf.RoundToInt(HorizontalInput);
             if (localHorizontalInput != CheckWallDirection()) localGravity = Mathf.Lerp(0, 40f, 0.05f);
             if (targetVelocity.Y != 0) targetVelocity.Y = Mathf.Lerp(targetVelocity.Y, 0, 0.1f);
         }
