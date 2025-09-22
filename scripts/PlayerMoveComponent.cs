@@ -8,16 +8,21 @@ public partial class PlayerMoveComponent : Node
         player = GetParent<Player>();
         AddMovementStates();
         AddAttackStates();
+
+        //debug
+        AttackStateMachine.DebugPrints = true;
     }
 
     public override void _PhysicsProcess(double delta)
     {
         Movement(delta);
+        Attacks(delta);
     }
 
     #region Movement
     #region MovementStats
-    [ExportSubgroup("Movement Properties")]
+    [ExportSubgroup("Movement Stats")]
+    [Export] public bool SnapInput = true;
     [Export] public float MaxSpeed = 220f;
     [Export] public float GroundAcceleration = 50f;
     [Export] public float AirAcceleration = 75f;
@@ -35,8 +40,10 @@ public partial class PlayerMoveComponent : Node
     #endregion
     public float VelocityChange;
     public Vector2 TargetVelocity = Vector2.Zero;
+    public Vector2 VectorInput;
     public float HorizontalInput;
     public bool InputLocked;
+    public float LastHorizontalInput = 1;
     public FiniteStateMachine MovementStateMachine = new();
     private void AddMovementStates()
     {
@@ -52,7 +59,14 @@ public partial class PlayerMoveComponent : Node
     private void Movement(double delta)
     {
         MovementStateMachine.ExecuteStatePhysics((float)delta);
+        VectorInput = Input.GetVector("inputLeft", "inputRight", "inputDown", "inputUp");
         if (!InputLocked) HorizontalInput = Input.GetAxis("inputLeft", "inputRight");
+        if (SnapInput && HorizontalInput != 0)
+        {
+            if (HorizontalInput > 0) HorizontalInput = 1;
+            else HorizontalInput = -1;
+        }
+        if (!InputLocked && Mathf.RoundToInt(HorizontalInput) != 0) LastHorizontalInput = Mathf.RoundToInt(HorizontalInput);
         else HorizontalInput = 0;
         TargetVelocity.X = Mathf.MoveToward(TargetVelocity.X, HorizontalInput * MaxSpeed, VelocityChange);
         player.Velocity = TargetVelocity;
@@ -60,16 +74,27 @@ public partial class PlayerMoveComponent : Node
     }
     #endregion
     #region Attacks
+    #region AttackStats
+    [ExportSubgroup("Attack Stats")]
+    [Export] public float AttackCooldown = 0.1f;
+    [Export] public float AttackDamage = 10f;
+    #endregion
     public FiniteStateMachine AttackStateMachine = new();
-
+    public Area2D AttackArea;
     private void AddAttackStates()
     {
-        AttackStateMachine.AddState("Idle", new AttackIdle(player, this));
-        AttackStateMachine.AddState("Up", new AttackUp(player, this));
-        AttackStateMachine.AddState("Left", new AttackLeft(player, this));
-        AttackStateMachine.AddState("Down", new AttackDown(player, this));
-        AttackStateMachine.AddState("Right", new AttackRight(player, this));
+        AttackArea = player.GetNode<Area2D>("AttackArea");
+        AttackStateMachine.AddState("Idle", new AttackIdle(player, this, AttackArea));
+        AttackStateMachine.AddState("Up", new AttackUp(player, this, AttackArea));
+        AttackStateMachine.AddState("Left", new AttackLeft(player, this, AttackArea));
+        AttackStateMachine.AddState("Down", new AttackDown(player, this, AttackArea));
+        AttackStateMachine.AddState("Right", new AttackRight(player, this, AttackArea));
         AttackStateMachine.ChangeState("Idle");
+    }
+
+    private void Attacks(double delta)
+    {
+        AttackStateMachine.ExecuteStatePhysics((float)delta);
     }
     #endregion
 }

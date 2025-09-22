@@ -1,14 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://bolbcgmhk67xv"]
+[gd_scene load_steps=15 format=3 uid="uid://bolbcgmhk67xv"]
 
 [ext_resource type="Script" uid="uid://b5bfd86l5lpii" path="res://scripts/Player.cs" id="1_p0vlq"]
 [ext_resource type="Resource" uid="uid://bhjlsvrgvvmhs" path="res://resources/playerStats/defaultPlayerStats.tres" id="2_3li8b"]
 [ext_resource type="Script" uid="uid://cs3byuibi0rk8" path="res://scripts/HealthComponent.cs" id="2_v6fml"]
 [ext_resource type="Texture2D" uid="uid://b6skokrq7vdrr" path="res://assets/sprites/player/littleguy.png" id="3_qu4a1"]
-[ext_resource type="Animation" uid="uid://dylaogbgqlpal" path="res://assets/animations/AttackDown.res" id="6_6eyey"]
-[ext_resource type="Texture2D" uid="uid://byrcjxibcdr8a" path="res://assets/sprites/player/WeaponTemp.png" id="6_70d11"]
-[ext_resource type="Animation" uid="uid://dns0i4chyg1hj" path="res://assets/animations/AttackLeft.res" id="7_d3wef"]
-[ext_resource type="Animation" uid="uid://baph28wnwolfv" path="res://assets/animations/AttackRight.res" id="8_o4126"]
-[ext_resource type="Animation" uid="uid://b7nmsn18h5eru" path="res://assets/animations/AttackUp.res" id="9_lkdrv"]
 [ext_resource type="Script" uid="uid://b5rjyo46og15f" path="res://scripts/PlayerMoveComponent.cs" id="10_6eyey"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_70d11"]
@@ -49,7 +44,7 @@ anti_aliasing = false
 radius = 50.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qu4a1"]
-size = Vector2(33, 16)
+size = Vector2(33, 28)
 
 [sub_resource type="Curve" id="Curve_qu4a1"]
 _data = [Vector2(0, 0), 0.0, 13.561872, 0, 0, Vector2(0.25225222, 1), -0.08226794, -0.08226794, 0, 0, Vector2(0.5045045, 1), -0.25594458, -0.25594458, 0, 0, Vector2(0.7567567, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -9.178007, 0.0, 0, 0]
@@ -68,42 +63,6 @@ gravity = Vector3(0, 0, 0)
 scale_min = 2.0
 scale_max = 2.0
 scale_curve = SubResource("CurveTexture_70d11")
-
-[sub_resource type="Animation" id="Animation_cw2d6"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Weapon:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, -5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Weapon:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [-0.261799]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_khinc"]
-_data = {
-&"AttackDown": ExtResource("6_6eyey"),
-&"AttackLeft": ExtResource("7_d3wef"),
-&"AttackRight": ExtResource("8_o4126"),
-&"AttackUp": ExtResource("9_lkdrv"),
-&"RESET": SubResource("Animation_cw2d6")
-}
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_p0vlq")
@@ -146,7 +105,7 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="HurtBox" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(26.5, 1.2239188e-06)
+position = Vector2(26.5, -2.3841858e-07)
 shape = SubResource("RectangleShape2D_qu4a1")
 
 [node name="HealthComponent" type="Node" parent="."]
@@ -163,17 +122,6 @@ amount = 512
 fixed_fps = 165
 trail_section_subdivisions = 8
 process_material = SubResource("ParticleProcessMaterial_qu4a1")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_khinc")
-}
-
-[node name="Weapon" type="Sprite2D" parent="."]
-z_index = -1
-position = Vector2(0, -5)
-rotation = -0.261799
-texture = ExtResource("6_70d11")
 
 [node name="PlayerMoveComponent" type="Node" parent="."]
 script = ExtResource("10_6eyey")

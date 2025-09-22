@@ -19,6 +19,11 @@ public partial class MovementMidair : PlayerState
         JumpBuffered = false;
         GD.Print(previous);
         if (previous is not (MovementJump or MovementWallJump or MovementWallGrab)) CoyoteTime();
+        else if (previous is MovementJump)
+        {
+            var jump = previous as MovementJump;
+            if (jump.Pogo) LocalGravity = controller.FallAceleration / 2;
+        }
         controller.MaxSpeed = 250;
     }
 

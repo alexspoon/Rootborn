@@ -1,7 +1,23 @@
 using Godot;
 using System;
 
-public partial class AttackDown : PlayerState
+public partial class AttackDown : PlayerAttackState
 {
-    public AttackDown(Player plr, PlayerMoveComponent ctrl) : base(plr, ctrl) { }
+    public AttackDown(Player plr, PlayerMoveComponent ctrl, Area2D atk) : base(plr, ctrl, atk) { }
+    public override void Enter(State previous = null)
+    {
+        attackArea.GlobalRotation = Mathf.DegToRad(90f);
+        attackArea.Position = new Vector2(0, 6);
+        if (Hitcheck())
+        {
+            controller.MovementStateMachine.ChangeState("Jump");
+        }
+        var cooldown = UtilityFunctions.CreateOneShotTimer(controller.AttackCooldown, player);
+        cooldown.Timeout += () =>
+        {
+            StateMachine.ChangeState("Idle");
+            cooldown.QueueFree();
+        };
+    }
+
 }

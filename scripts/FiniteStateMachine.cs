@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using Godot;
 
 public class FiniteStateMachine
 {
+    public bool DebugPrints = false;
     protected Dictionary<string, State> states = new();
     public State CurrentState { get; private set; }
     public string CurrentStateName { get; private set; }
@@ -22,6 +24,6 @@ public class FiniteStateMachine
         nextState.Enter(CurrentState);
         CurrentState = nextState;
         CurrentStateName = newState;
-        GD.Print("changed state to " + CurrentStateName);
+        if (DebugPrints) GD.Print("Changed state to: " + CurrentStateName);
     }
 }
