@@ -19,10 +19,9 @@ public partial class MovementMidair : PlayerState
         JumpBuffered = false;
         GD.Print(previous);
         if (previous is not (MovementJump or MovementWallJump or MovementWallGrab)) CoyoteTime();
-        else if (previous is MovementJump)
+        if (previous is MovementPogo)
         {
-            var jump = previous as MovementJump;
-            if (jump.Pogo) LocalGravity = controller.FallAceleration / 2;
+            LocalGravity -= 5;
         }
         controller.MaxSpeed = 250;
     }
@@ -65,14 +64,19 @@ public partial class MovementMidair : PlayerState
             else if (controller.HorizontalInput == 0) StateMachine.ChangeState("Idle");
             else StateMachine.ChangeState("Walking");
         }
-        if (Previous is MovementJump && (PreviousYVelocity < 0.01 && controller.TargetVelocity.Y > 0))
-        {
-            GD.Print("apex");
-            LocalGravity = controller.FallAceleration / 2;
-        }
-        else LocalGravity = controller.FallAceleration;
         controller.TargetVelocity.Y += LocalGravity;
         controller.TargetVelocity = new Vector2(controller.TargetVelocity.X, Mathf.Min(controller.TargetVelocity.Y, controller.TerminalVelocity));
+        if (Previous is MovementJump && PreviousYVelocity < 0.01 && controller.TargetVelocity.Y > 0)
+        {
+            GD.Print("apex");
+            LocalGravity = controller.FallAceleration / 4;
+            controller.MaxSpeed = 280;
+        }
+        else if (Previous is not MovementPogo)
+        {
+            LocalGravity = controller.FallAceleration;
+            controller.MaxSpeed = 250;
+        } 
         if (player.IsOnCeilingOnly()) controller.TargetVelocity.Y = controller.FallAceleration;
         PreviousYVelocity = controller.TargetVelocity.Y;
     }

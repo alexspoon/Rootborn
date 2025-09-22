@@ -51,6 +51,7 @@ public partial class PlayerMoveComponent : Node
         MovementStateMachine.AddState("Walking", new MovementWalking(player, this));
         MovementStateMachine.AddState("Midair", new MovementMidair(player, this));
         MovementStateMachine.AddState("Jump", new MovementJump(player, this));
+        MovementStateMachine.AddState("Pogo", new MovementPogo(player, this));
         MovementStateMachine.AddState("WallGrab", new MovementWallGrab(player, this));
         MovementStateMachine.AddState("WallJump", new MovementWallJump(player, this));
         MovementStateMachine.AddState("Dash", new MovementDash(player, this));

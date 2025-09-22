@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public partial class MovementJump : PlayerState
+public partial class MovementPogo : PlayerState
 {
-    public MovementJump(Player plr, PlayerMoveComponent ctrl) : base(plr, ctrl) { }
+    public MovementPogo(Player plr, PlayerMoveComponent ctrl) : base(plr, ctrl) { }
     public override void Enter(State previous = null)
     {
         controller.TargetVelocity.Y = controller.JumpStrength;

@@ -8,16 +8,19 @@ public partial class AttackDown : PlayerAttackState
     {
         attackArea.GlobalRotation = Mathf.DegToRad(90f);
         attackArea.Position = new Vector2(0, 6);
-        if (Hitcheck())
-        {
-            controller.MovementStateMachine.ChangeState("Jump");
-        }
         var cooldown = UtilityFunctions.CreateOneShotTimer(controller.AttackCooldown, player);
         cooldown.Timeout += () =>
         {
             StateMachine.ChangeState("Idle");
             cooldown.QueueFree();
         };
+    }
+    public override void PhysicsProcess(float delta)
+    {
+        if (Hitcheck())
+        {
+            controller.MovementStateMachine.ChangeState("Pogo");
+        }
     }
 
 }

@@ -7,8 +7,7 @@ public partial class AttackRight : PlayerAttackState
     public override void Enter(State previous = null)
     {
         attackArea.GlobalRotation = 0;
-        attackArea.Position = new Vector2(6, 0);
-        Hitcheck();
+        attackArea.Position = Vector2.Zero;
         var cooldown = UtilityFunctions.CreateOneShotTimer(controller.AttackCooldown, player);
         cooldown.Timeout += () =>
         {
@@ -16,5 +15,10 @@ public partial class AttackRight : PlayerAttackState
             cooldown.QueueFree();
         };
     }
+    public override void PhysicsProcess(float delta)
+    {
+        Hitcheck();
+    }
+
 
 }

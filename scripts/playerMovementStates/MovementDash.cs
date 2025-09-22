@@ -12,7 +12,8 @@ public partial class MovementDash : PlayerState
         initialInput = Mathf.RoundToInt(controller.HorizontalInput);
         if (previous is MovementWallGrab)
         {
-            initialInput = -initialInput;
+            var wallGrab = previous as MovementWallGrab;
+            initialInput = wallGrab.WallDirection;
         }
         var dashTimer = UtilityFunctions.CreateOneShotTimer(controller.DashDuration, player);
         dashTimer.Timeout += () =>
@@ -51,7 +52,7 @@ public partial class MovementDash : PlayerState
         float wacky = 3 * t * t - 2 * t * t * t;
         var dashSpeed = Mathf.Lerp(controller.TargetVelocity.X, initialInput * controller.MaxSpeed * 3, wacky);
         controller.TargetVelocity.X = dashSpeed;
-        if (player.IsOnWallOnly())
+        if (player.IsOnWallOnly() && StateMachine.PreviousStateName != "WallGrab")
         {
             CheckNextState();
         }

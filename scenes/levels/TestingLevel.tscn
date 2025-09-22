@@ -302,7 +302,16 @@ position = Vector2(768, 128)
 position = Vector2(864, 128)
 
 [node name="PogoRing7" parent="." instance=ExtResource("5_gbxu6")]
-position = Vector2(1472, 112)
+position = Vector2(1472, 96)
 
 [node name="PogoRing8" parent="." instance=ExtResource("5_gbxu6")]
 position = Vector2(280, 408)
+
+[node name="PogoRing9" parent="." instance=ExtResource("5_gbxu6")]
+position = Vector2(1368, 256)
+
+[node name="PogoRing10" parent="." instance=ExtResource("5_gbxu6")]
+position = Vector2(1456, 216)
+
+[node name="PogoRing11" parent="." instance=ExtResource("5_gbxu6")]
+position = Vector2(1368, 176)
