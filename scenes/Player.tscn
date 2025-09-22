@@ -4,12 +4,12 @@
 [ext_resource type="Resource" uid="uid://bhjlsvrgvvmhs" path="res://resources/playerStats/defaultPlayerStats.tres" id="2_3li8b"]
 [ext_resource type="Script" uid="uid://cs3byuibi0rk8" path="res://scripts/HealthComponent.cs" id="2_v6fml"]
 [ext_resource type="Texture2D" uid="uid://b6skokrq7vdrr" path="res://assets/sprites/player/littleguy.png" id="3_qu4a1"]
-[ext_resource type="Script" uid="uid://dl1c7a6uq6m4y" path="res://scripts/PlayerController.cs" id="4_mdl7e"]
 [ext_resource type="Animation" uid="uid://dylaogbgqlpal" path="res://assets/animations/AttackDown.res" id="6_6eyey"]
 [ext_resource type="Texture2D" uid="uid://byrcjxibcdr8a" path="res://assets/sprites/player/WeaponTemp.png" id="6_70d11"]
 [ext_resource type="Animation" uid="uid://dns0i4chyg1hj" path="res://assets/animations/AttackLeft.res" id="7_d3wef"]
 [ext_resource type="Animation" uid="uid://baph28wnwolfv" path="res://assets/animations/AttackRight.res" id="8_o4126"]
 [ext_resource type="Animation" uid="uid://b7nmsn18h5eru" path="res://assets/animations/AttackUp.res" id="9_lkdrv"]
+[ext_resource type="Script" uid="uid://b5rjyo46og15f" path="res://scripts/PlayerMoveComponent.cs" id="10_6eyey"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_70d11"]
 
@@ -155,9 +155,6 @@ MaxHealth = 100.0
 Health = 100.0
 metadata/_custom_type_script = "uid://cs3byuibi0rk8"
 
-[node name="PlayerController" type="Node" parent="."]
-script = ExtResource("4_mdl7e")
-
 [node name="Trail" type="GPUParticles2D" parent="."]
 physics_interpolation_mode = 2
 top_level = true
@@ -177,3 +174,6 @@ z_index = -1
 position = Vector2(0, -5)
 rotation = -0.261799
 texture = ExtResource("6_70d11")
+
+[node name="PlayerMoveComponent" type="Node" parent="."]
+script = ExtResource("10_6eyey")

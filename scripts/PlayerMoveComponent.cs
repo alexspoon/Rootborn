@@ -2,90 +2,74 @@ using Godot;
 
 public partial class PlayerMoveComponent : Node
 {
-    private Vector2 _targetVelocity;
-    private bool _canJump;
-    private Timer _coyoteTimer = new();
-    private int _maxJumps = 1;
-    [Export] private float _coyoteTime = 0.2f;
-    [Export] private float _acceleration = 75f;
-    [Export] private float _airAcceleration = 80f;
-    [Export] private float _drag = 70f;
-    [Export] private float _airDrag = 60f;
-    [Export] private float _speed = 300f;
-    [Export] private float _gravity = 1500f;
-    [Export] private float _jumpVelocity = -500f;
-
+    public Player player;
     public override void _Ready()
     {
-        _coyoteTimer.WaitTime = _coyoteTime;
-        _coyoteTimer.OneShot = true;
-        _coyoteTimer.Timeout += CoyoteTimeTimeout;
-        AddChild(_coyoteTimer);
+        player = GetParent<Player>();
+        AddMovementStates();
+        AddAttackStates();
     }
 
-
-    public void Movement(Player player, double delta)
+    public override void _PhysicsProcess(double delta)
     {
-        int jumpCount = 0;
-        var horizontalInput = Input.GetAxis("inputLeft", "inputRight");
-        if (horizontalInput == 1)
-        {
-            player.Sprite.FlipH = false;
-        }
-        else if (horizontalInput == -1)
-        {
-            player.Sprite.FlipH = true;
-        }
-        var velocityChange = 0f;
-        if (player.IsOnFloor())
-        {
-            if (horizontalInput == 0)
-            {
-                velocityChange = _drag;
-            }
-            else velocityChange = _acceleration;
-        }
-        else
-        {
-            if (horizontalInput == 0)
-            {
-                velocityChange = _airDrag;
-            }
-            else velocityChange = _airAcceleration;
-        }
-        _targetVelocity.X = Mathf.MoveToward(_targetVelocity.X, horizontalInput * _speed, velocityChange);
-        if (player.IsOnFloor() || player.IsOnCeiling())
-        {
-            _targetVelocity.Y = 0;
-        }
-        if (player.IsOnFloor() && _canJump == false || player.IsOnWall() && _canJump == false)
-        {
-            _canJump = true;
-            jumpCount = 0;
-        }
-        if (!player.IsOnFloor() && _coyoteTimer.IsStopped() && jumpCount < _maxJumps)
-        {
-            if (!player.IsOnWall())
-            {
-                _coyoteTimer.Start();
-                GD.Print("coyotetime start");
-            }
-        }
-        if (!player.IsOnFloor()) _targetVelocity.Y += _gravity * (float)delta;
-        if (_canJump && jumpCount < _maxJumps)
-        {
-            if (Input.IsActionJustPressed("inputJump")) _targetVelocity.Y = _jumpVelocity;
-            jumpCount++;
-            if (jumpCount >= _maxJumps) _canJump = false;
-        }
-        player.Velocity = _targetVelocity;
+        Movement(delta);
+    }
+
+    #region Movement
+    #region MovementStats
+    [ExportSubgroup("Movement Properties")]
+    [Export] public float MaxSpeed = 220f;
+    [Export] public float GroundAcceleration = 50f;
+    [Export] public float AirAcceleration = 75f;
+    [Export] public float GroundDeceleration = 20f;
+    [Export] public float AirDeceleration = 5f;
+    [Export] public float JumpStrength = -520f;
+    [Export] public float FallAceleration = 40f;
+    [Export] public float TerminalVelocity = 400f;
+    [Export] public float JumpEndEarlyGravityModifier = 3f;
+    [Export] public float CoyoteTimeDuration = .1f;
+    [Export] public float JumpBufferTime = .2f;
+    [Export] public int MaxJumps = 1;
+    [Export] public float DashDuration = 0.2f;
+    [Export] public float DashCooldown = 0.5f;
+    #endregion
+    public float VelocityChange;
+    public Vector2 TargetVelocity = Vector2.Zero;
+    public float HorizontalInput;
+    public bool InputLocked;
+    public FiniteStateMachine MovementStateMachine = new();
+    private void AddMovementStates()
+    {
+        MovementStateMachine.AddState("Idle", new MovementIdle(player, this));
+        MovementStateMachine.AddState("Walking", new MovementWalking(player, this));
+        MovementStateMachine.AddState("Midair", new MovementMidair(player, this));
+        MovementStateMachine.AddState("Jump", new MovementJump(player, this));
+        MovementStateMachine.AddState("WallGrab", new MovementWallGrab(player, this));
+        MovementStateMachine.AddState("WallJump", new MovementWallJump(player, this));
+        MovementStateMachine.AddState("Dash", new MovementDash(player, this));
+        MovementStateMachine.ChangeState("Idle");
+    }
+    private void Movement(double delta)
+    {
+        MovementStateMachine.ExecuteStatePhysics((float)delta);
+        if (!InputLocked) HorizontalInput = Input.GetAxis("inputLeft", "inputRight");
+        else HorizontalInput = 0;
+        TargetVelocity.X = Mathf.MoveToward(TargetVelocity.X, HorizontalInput * MaxSpeed, VelocityChange);
+        player.Velocity = TargetVelocity;
         player.MoveAndSlide();
-
     }
+    #endregion
+    #region Attacks
+    public FiniteStateMachine AttackStateMachine = new();
 
-    private void CoyoteTimeTimeout()
+    private void AddAttackStates()
     {
-        _canJump = false;
-        GD.Print("coyotetime finish");
+        AttackStateMachine.AddState("Idle", new AttackIdle(player, this));
+        AttackStateMachine.AddState("Up", new AttackUp(player, this));
+        AttackStateMachine.AddState("Left", new AttackLeft(player, this));
+        AttackStateMachine.AddState("Down", new AttackDown(player, this));
+        AttackStateMachine.AddState("Right", new AttackRight(player, this));
+        AttackStateMachine.ChangeState("Idle");
     }
+    #endregion
 }

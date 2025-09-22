@@ -16,6 +16,7 @@ public class FiniteStateMachine
     }
     public void ChangeState(string newState)
     {
+        PreviousStateName = CurrentStateName;
         if (CurrentState != null) CurrentState.Exit();
         var nextState = states[newState];
         nextState.Enter(CurrentState);

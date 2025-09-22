@@ -60,7 +60,7 @@ public partial class PlayerController : Node
         grounded = player.IsOnFloor();
         Movement(delta);
         Attack();
-        previousYVelocity = targetVelocity.Y;
+        previousYVelocity = TargetVelocity.Y;
     }
 
     #region Attacking
@@ -185,7 +185,7 @@ public partial class PlayerController : Node
             {
                 localGravity = 20;
                 gravityTimer.Start();
-                targetVelocity.Y = JumpStrength;
+                TargetVelocity.Y = JumpStrength;
             }
             healthComponent.TakeDamage(10);
         }
@@ -193,7 +193,7 @@ public partial class PlayerController : Node
 
     #endregion
     #region Movement
-    private Vector2 targetVelocity = Vector2.Zero;
+    public Vector2 TargetVelocity = Vector2.Zero;
     private float previousYVelocity;
     private float localGravity = 40;
     private Timer gravityTimer;
@@ -215,8 +215,8 @@ public partial class PlayerController : Node
     {
         isOnWall = player.IsOnWallOnly();
         HorizontalInput = Input.GetAxis("inputLeft", "inputRight");
-        if (player.IsOnCeiling() && targetVelocity.Y < 0) targetVelocity.Y = Mathf.Lerp(targetVelocity.Y, 0, 0.1f);
-        if (isOnWall && targetVelocity.X != 0) targetVelocity.X = Mathf.Lerp(targetVelocity.X, 0, 0.1f);
+        if (player.IsOnCeiling() && TargetVelocity.Y < 0) TargetVelocity.Y = Mathf.Lerp(TargetVelocity.Y, 0, 0.1f);
+        if (isOnWall && TargetVelocity.X != 0) TargetVelocity.X = Mathf.Lerp(TargetVelocity.X, 0, 0.1f);
         if (!canWallDrag) HorizontalInput = 0;
         if (HorizontalInput == 0)
         {
@@ -257,12 +257,12 @@ public partial class PlayerController : Node
                 MaxSpeed = 250;
             }
         }
-        targetVelocity.X = Mathf.MoveToward(targetVelocity.X, HorizontalInput * MaxSpeed, VelocityChange);
+        TargetVelocity.X = Mathf.MoveToward(TargetVelocity.X, HorizontalInput * MaxSpeed, VelocityChange);
         if (Input.IsActionJustPressed("inputDash")) DashStart();
         if (player.IsOnFloor())
         {
             jumpCount = 0;
-            targetVelocity.Y = 0;
+            TargetVelocity.Y = 0;
             coyoteJump = false;
             if (!gravityTimer.IsStopped()) gravityTimer.Stop();
             if (localGravity != 40f) ResetGravity();
@@ -293,7 +293,7 @@ public partial class PlayerController : Node
             }
         }
         if (grounded && jumpBuffered && !isDashing) Jump();
-        player.Velocity = targetVelocity;
+        player.Velocity = TargetVelocity;
         player.MoveAndSlide();
     }
     private async void JumpBuffer()
@@ -315,7 +315,7 @@ public partial class PlayerController : Node
     public void Jump()
     {
         if (isDashing || isOnWall) ResetGravity();
-        targetVelocity.Y += JumpStrength;
+        TargetVelocity.Y += JumpStrength;
         jumpCount++;
     }
     private void WallJump()
@@ -323,8 +323,8 @@ public partial class PlayerController : Node
         ResetGravity();
         wallJumpTimer.Start();
         canWallDrag = false;
-        targetVelocity.Y += JumpStrength -30;
-        targetVelocity.X += CheckWallDirection() * 500;
+        TargetVelocity.Y += JumpStrength -30;
+        TargetVelocity.X += CheckWallDirection() * 500;
         jumpCount = 0;
         jumpCount++;
     }
@@ -342,8 +342,8 @@ public partial class PlayerController : Node
         }
         mesh.RotationDegrees = localHorizontalInput * 45f;
         player.healthBar.RotationDegrees = localHorizontalInput * 45f;
-        targetVelocity.X = localHorizontalInput * 900;
-        targetVelocity.Y = 0;
+        TargetVelocity.X = localHorizontalInput * 900;
+        TargetVelocity.Y = 0;
         localGravity = 0;
         dashTimer.Start();
         dashCooldownTimer.Start();
@@ -367,11 +367,11 @@ public partial class PlayerController : Node
         {
             var localHorizontalInput = Mathf.RoundToInt(HorizontalInput);
             if (localHorizontalInput != CheckWallDirection()) localGravity = Mathf.Lerp(0, 40f, 0.05f);
-            if (targetVelocity.Y != 0) targetVelocity.Y = Mathf.Lerp(targetVelocity.Y, 0, 0.1f);
+            if (TargetVelocity.Y != 0) TargetVelocity.Y = Mathf.Lerp(TargetVelocity.Y, 0, 0.1f);
         }
         else if (localGravity != 40 && gravityTimer.IsStopped()) ResetGravity();
-        targetVelocity.Y += localGravity;
-        if (previousYVelocity < 0.01 && targetVelocity.Y > 0)
+        TargetVelocity.Y += localGravity;
+        if (previousYVelocity < 0.01 && TargetVelocity.Y > 0)
         {
             if (!gravityTimer.IsStopped()) return;
             if (!canDash) return;
@@ -382,9 +382,9 @@ public partial class PlayerController : Node
         }
         if (Input.IsActionJustReleased("inputJump") && !player.IsOnFloor())
         {
-            if (targetVelocity.Y < 0) targetVelocity.Y = -targetVelocity.Y / 2;
+            if (TargetVelocity.Y < 0) TargetVelocity.Y = -TargetVelocity.Y / 2;
         }
-        targetVelocity = new Vector2(targetVelocity.X, Mathf.Min(targetVelocity.Y, TerminalVelocity));
+        TargetVelocity = new Vector2(TargetVelocity.X, Mathf.Min(TargetVelocity.Y, TerminalVelocity));
     }
     private void ResetGravity()
     {

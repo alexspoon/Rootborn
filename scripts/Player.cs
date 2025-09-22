@@ -4,7 +4,7 @@ public partial class Player : CharacterBody2D
 {
     [Export] public PlayerStats playerStats;
     [Export] public PackedScene _sceneToSpawn;
-    public PlayerController playerController;
+    // public PlayerController playerController;
     public Sprite2D Sprite;
     private SaveManager _saveManager;
     private LevelManager _levelManager;
@@ -13,11 +13,13 @@ public partial class Player : CharacterBody2D
     public PlayerCamera playerCamera;
     private GpuParticles2D _trail;
     public ProgressBar healthBar;
+    public MeshInstance2D Mesh;
 
     public override void _Ready()
     {
+        Mesh = GetNode<MeshInstance2D>("DebugMesh");
         playerCamera = GetParent().GetNodeOrNull<PlayerCamera>("PlayerCamera");
-        playerController = GetNode<PlayerController>("PlayerController");
+        // playerController = GetNode<PlayerController>("PlayerController");
         _saveManager = GetNode<SaveManager>("/root/SaveManager");
         _levelManager = GetNode<LevelManager>("/root/LevelManager");
         healthComponent = GetNode<HealthComponent>("HealthComponent");
