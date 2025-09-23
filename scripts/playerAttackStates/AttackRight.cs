@@ -8,6 +8,7 @@ public partial class AttackRight : PlayerAttackState
     {
         attackArea.GlobalRotation = 0;
         attackArea.Position = Vector2.Zero;
+       
         var cooldown = UtilityFunctions.CreateOneShotTimer(controller.AttackCooldown, player);
         cooldown.Timeout += () =>
         {
@@ -17,6 +18,8 @@ public partial class AttackRight : PlayerAttackState
     }
     public override void PhysicsProcess(float delta)
     {
+        var attackSprite = attackArea.GetNode<AnimatedSprite2D>("AttackSprite");
+        attackSprite.Play("Slash");
         Hitcheck();
     }
 

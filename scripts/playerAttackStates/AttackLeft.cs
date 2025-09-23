@@ -17,6 +17,8 @@ public partial class AttackLeft : PlayerAttackState
     }
     public override void PhysicsProcess(float delta)
     {
+        var attackSprite = attackArea.GetNode<AnimatedSprite2D>("AttackSprite");
+        attackSprite.Play("Slash");
         Hitcheck();
     }
 

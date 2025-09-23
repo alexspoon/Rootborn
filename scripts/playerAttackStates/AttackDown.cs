@@ -8,6 +8,7 @@ public partial class AttackDown : PlayerAttackState
     {
         attackArea.GlobalRotation = Mathf.DegToRad(90f);
         attackArea.Position = new Vector2(0, 6);
+        
         var cooldown = UtilityFunctions.CreateOneShotTimer(controller.AttackCooldown, player);
         cooldown.Timeout += () =>
         {
@@ -17,6 +18,8 @@ public partial class AttackDown : PlayerAttackState
     }
     public override void PhysicsProcess(float delta)
     {
+        var attackSprite = attackArea.GetNode<AnimatedSprite2D>("AttackSprite");
+        attackSprite.Play("Slash");
         if (Hitcheck())
         {
             controller.MovementStateMachine.ChangeState("Pogo");
