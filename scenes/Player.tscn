@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bolbcgmhk67xv"]
+[gd_scene load_steps=28 format=3 uid="uid://bolbcgmhk67xv"]
 
 [ext_resource type="Script" uid="uid://b5bfd86l5lpii" path="res://scripts/Player.cs" id="1_p0vlq"]
 [ext_resource type="Resource" uid="uid://bhjlsvrgvvmhs" path="res://resources/playerStats/defaultPlayerStats.tres" id="2_3li8b"]
@@ -47,6 +47,26 @@ radius = 50.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qu4a1"]
 size = Vector2(33, 28)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_70d11"]
+atlas = ExtResource("4_70d11")
+region = Rect2(0, 0, 33, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d3wef"]
+atlas = ExtResource("4_70d11")
+region = Rect2(33, 0, 33, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o4126"]
+atlas = ExtResource("4_70d11")
+region = Rect2(66, 0, 33, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lkdrv"]
+atlas = ExtResource("4_70d11")
+region = Rect2(99, 0, 33, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p7iby"]
+atlas = ExtResource("4_70d11")
+region = Rect2(132, 0, 33, 28)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_cw2d6"]
 atlas = ExtResource("4_70d11")
 region = Rect2(0, 0, 33, 28)
@@ -67,6 +87,26 @@ region = Rect2(99, 0, 33, 28)
 animations = [{
 "frames": [{
 "duration": 0.02,
+"texture": SubResource("AtlasTexture_70d11")
+}, {
+"duration": 0.02,
+"texture": SubResource("AtlasTexture_d3wef")
+}, {
+"duration": 0.02,
+"texture": SubResource("AtlasTexture_o4126")
+}, {
+"duration": 0.02,
+"texture": SubResource("AtlasTexture_lkdrv")
+}, {
+"duration": 0.02,
+"texture": SubResource("AtlasTexture_p7iby")
+}],
+"loop": false,
+"name": &"Slash",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 0.02,
 "texture": SubResource("AtlasTexture_cw2d6")
 }, {
 "duration": 0.02,
@@ -82,27 +122,40 @@ animations = [{
 "texture": null
 }],
 "loop": false,
-"name": &"Slash",
+"name": &"SlashOld",
 "speed": 1.0
 }]
 
+[sub_resource type="Curve" id="Curve_70d11"]
+_limits = [0.0, 100.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.64705884, 0), 3.161429, 3.161429, 0, 0, Vector2(1, 100), -91.05058, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_cw2d6"]
+curve = SubResource("Curve_70d11")
+
 [sub_resource type="Curve" id="Curve_qu4a1"]
-_data = [Vector2(0, 0), 0.0, 13.561872, 0, 0, Vector2(0.25225222, 1), -0.08226794, -0.08226794, 0, 0, Vector2(0.5045045, 1), -0.25594458, -0.25594458, 0, 0, Vector2(0.7567567, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -9.178007, 0.0, 0, 0]
-point_count = 5
+_data = [Vector2(0, 0), 0.0, 6.927151, 0, 0, Vector2(0.19909504, 1), 0.0, 0.0, 0, 0, Vector2(0.30316743, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.7895681, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="CurveTexture" id="CurveTexture_70d11"]
 curve = SubResource("Curve_qu4a1")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qu4a1"]
-particle_flag_align_y = true
 particle_flag_disable_z = true
-inherit_velocity_ratio = -0.01
-direction = Vector3(0, 0, 0)
-spread = 0.0
+angle_min = -179.99998
+angle_max = 180.00002
+inherit_velocity_ratio = -0.02
+direction = Vector3(-1, -1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
 gravity = Vector3(0, 0, 0)
-scale_min = 2.0
-scale_max = 2.0
+tangential_accel_min = -6.000002
+tangential_accel_max = 5.9999976
+damping_curve = SubResource("CurveTexture_cw2d6")
+scale_min = 0.5
 scale_curve = SubResource("CurveTexture_70d11")
+color = Color(0, 0, 0, 0.67058825)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_p0vlq")
@@ -154,7 +207,6 @@ scale = Vector2(0.99999994, 1)
 sprite_frames = SubResource("SpriteFrames_d3wef")
 animation = &"Slash"
 frame = 4
-frame_progress = 1.0
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("2_v6fml")
@@ -165,8 +217,12 @@ metadata/_custom_type_script = "uid://cs3byuibi0rk8"
 [node name="Trail" type="GPUParticles2D" parent="."]
 physics_interpolation_mode = 2
 top_level = true
-z_index = -1
-amount = 512
+z_index = -10
+position = Vector2(0, 15)
+amount = 32
+lifetime = 0.6
+preprocess = 0.1
+randomness = 0.2
 fixed_fps = 165
 trail_section_subdivisions = 8
 process_material = SubResource("ParticleProcessMaterial_qu4a1")

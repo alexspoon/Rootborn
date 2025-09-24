@@ -6,6 +6,7 @@ public partial class PlayerMoveComponent : Node
     public override void _Ready()
     {
         player = GetParent<Player>();
+        particleTrail = player.GetNode<GpuParticles2D>("Trail");
         AddMovementStates();
         AddAttackStates();
 
@@ -17,7 +18,27 @@ public partial class PlayerMoveComponent : Node
     {
         Movement(delta);
         Attacks(delta);
+        UpdateMovementTrail();
     }
+
+    #region VFX
+    public GpuParticles2D particleTrail;
+
+    private void UpdateMovementTrail()
+    {
+        particleTrail.GlobalPosition = new Vector2(player.GlobalPosition.X, player.GlobalPosition.Y + 15);
+        if (MovementStateMachine.CurrentState is MovementWalking or MovementSprinting or MovementDash && player.IsOnFloor())
+        {
+            particleTrail.Emitting = true;
+        }
+        else if (MovementStateMachine.CurrentState is MovementJump)
+        {
+            particleTrail.Emitting = true;
+        }
+        else if (MovementStateMachine.CurrentState is not MovementMidair) particleTrail.Emitting = false;
+    }
+
+    #endregion
 
     #region Movement
     #region MovementStats

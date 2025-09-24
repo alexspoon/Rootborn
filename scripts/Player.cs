@@ -11,7 +11,6 @@ public partial class Player : CharacterBody2D
     public HealthComponent healthComponent;
     public Area2D PickupArea;
     public PlayerCamera playerCamera;
-    private GpuParticles2D _trail;
     public ProgressBar healthBar;
     public MeshInstance2D Mesh;
 
@@ -26,7 +25,6 @@ public partial class Player : CharacterBody2D
         Sprite = GetNode<Sprite2D>("Sprite");
         PickupArea = GetNode<Area2D>("PickupArea");
         healthBar = GetNode<ProgressBar>("HealthBar");
-        _trail = GetNode<GpuParticles2D>("Trail");
 
         UpdateStats();
     }
@@ -35,7 +33,6 @@ public partial class Player : CharacterBody2D
         if (Input.IsActionJustPressed("inputEscapeMenu")) _levelManager.SwitchLevel("MainMenu", false);
         //if (Input.IsActionJustPressed("inputEquipTool")) _saveManager.SaveMetaprogression("test.json");
 
-        _trail.GlobalPosition = GlobalPosition;
         healthBar.Value = healthComponent.Health;
         healthBar.MaxValue = healthComponent.MaxHealth;
 

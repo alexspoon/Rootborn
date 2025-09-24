@@ -10,10 +10,29 @@ public partial class MovementMidair : PlayerState
     public State Previous;
     public float PreviousYVelocity;
     public float LocalGravity;
+    private GpuParticles2D particleTrail;
 
     public override void Enter(State previous = null)
     {
         Previous = previous;
+        //Particle jump effect
+        particleTrail = controller.particleTrail;
+        if (previous is MovementJump)
+        {
+            var jump = previous as MovementJump;
+            if (jump.Previous is MovementIdle or MovementWalking)
+            {
+                particleTrail.Emitting = true;
+                var particleTimer = UtilityFunctions.CreateOneShotTimer(0.025f, player);
+                particleTimer.Timeout += () =>
+                {
+                    particleTrail.Emitting = false;
+                    particleTimer.QueueFree();
+                };
+            }
+        }
+        else particleTrail.Emitting = false;
+
         LocalGravity = controller.FallAceleration;
         CoyoteJump = false;
         JumpBuffered = false;
@@ -57,7 +76,7 @@ public partial class MovementMidair : PlayerState
         }
         else if (Input.IsActionJustPressed("inputDash") && controller.HorizontalInput != 0) StateMachine.ChangeState("Dash");
         else if (Input.IsActionJustPressed("inputJump")) JumpBuffer();
-        else if (player.IsOnWallOnly() && (Previous is MovementWallJump || Mathf.RoundToInt(controller.HorizontalInput) != 0)) StateMachine.ChangeState("WallGrab");
+        else if (player.IsOnWallOnly() && (Previous is MovementWallJump || (Mathf.RoundToInt(controller.HorizontalInput) != 0 && controller.TargetVelocity.Y > 0))) StateMachine.ChangeState("WallGrab");
         else if (player.IsOnFloor())
         {
             if (JumpBuffered) StateMachine.ChangeState("Jump");
